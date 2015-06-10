@@ -1,0 +1,43 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="nate.threesheets.activities.TypeActivity">
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Wine"
+        android:id="@+id/radio_wine"
+        android:layout_marginTop="124dp"
+        android:checked="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="103dp"
+        android:layout_marginStart="103dp" />
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Whiskey"
+        android:id="@+id/radio_whiskey"
+        android:layout_below="@+id/radio_wine"
+        android:layout_alignLeft="@+id/radio_wine"
+        android:layout_alignStart="@+id/radio_wine"
+        android:layout_marginTop="42dp"
+        android:checked="false" />
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sake"
+        android:id="@+id/radio_sake"
+        android:layout_below="@+id/radio_whiskey"
+        android:layout_alignLeft="@+id/radio_whiskey"
+        android:layout_alignStart="@+id/radio_whiskey"
+        android:layout_marginTop="49dp"
+        android:checked="false" />
+</RelativeLayout>
