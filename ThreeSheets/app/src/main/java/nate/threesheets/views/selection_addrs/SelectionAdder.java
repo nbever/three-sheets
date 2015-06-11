@@ -73,7 +73,7 @@ public class SelectionAdder<E> extends LinearLayout implements View.OnClickListe
             this.addView(createNewEntry(), this.getChildCount()-2);
         }
         else {
-            int i = 0;
+            this.removeView((View) v.getParent());
         }
     }
 }

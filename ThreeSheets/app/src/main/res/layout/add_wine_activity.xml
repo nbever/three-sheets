@@ -22,6 +22,7 @@
 
                 <!-- meta data page -->
                 <LinearLayout
+                    android:id="@+id/view_metadata"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
@@ -98,7 +99,7 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/txt_color"
                         android:height="30dp"
-                        android:backgroundTint="#fffffbe9" />
+                        android:background="#fffffcbd" />
 
                     <SeekBar
                         android:layout_width="match_parent"
@@ -131,7 +132,7 @@
                             android:layout_height="wrap_content"
                             android:inputType="number"
                             android:ems="10"
-                            android:id="@+id/editText2"
+                            android:id="@+id/txt_price"
                             android:layout_weight="1" />
 
 
@@ -141,15 +142,56 @@
 
                 <!-- flavor page -->
                 <LinearLayout
+                    android:id="@+id/view_flavors"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Page 2"/>
+                        android:text="Flavor Description"
+                        android:ems="10"/>
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="15dp" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left"
+                            android:id="@+id/btn_rotate_left"
+                            android:layout_alignParentLeft="true"
+                            android:text="L"/>
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/btn_rotate_right"
+                            android:text="R"
+                            android:layout_alignParentRight="true" />
+
+                    </RelativeLayout>
+
+                    <nate.threesheets.views.flavor_wheel.WineFlavorWheel
+                        android:layout_width="280dp"
+                        android:layout_height="300dp"
+                        android:layout_gravity="center">
+
+                    </nate.threesheets.views.flavor_wheel.WineFlavorWheel>
+
+                    <SeekBar
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/sld_flavor"/>
 
                 </LinearLayout>
+
             </ViewFlipper>
 
             <LinearLayout
@@ -162,7 +204,8 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/btn_previous"
                     android:enabled="false"
-                    android:text="Back"/>
+                    android:text="Back"
+                    android:onClick="flipBack"/>
 
                 <Button
                     android:layout_width="wrap_content"
@@ -170,7 +213,15 @@
                     android:id="@+id/btn_next"
                     android:enabled="true"
                     android:text="Next"
-                    android:onClick=""/>
+                    android:onClick="flipNext"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_save"
+                    android:paddingLeft="15dp"
+                    android:text="Save"
+                    android:onClick="done"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
