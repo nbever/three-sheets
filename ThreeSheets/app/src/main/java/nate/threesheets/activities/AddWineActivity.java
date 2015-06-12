@@ -11,24 +11,31 @@ import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import nate.threesheets.R;
+import nate.threesheets.model.WineFlavors;
+import nate.threesheets.views.flavor_wheel.FlavorChanging;
+import nate.threesheets.views.flavor_wheel.WineFlavorWheel;
 
 /**
  * Created by nate on 6/10/15.
  */
-public class AddWineActivity extends Activity implements SeekBar.OnSeekBarChangeListener {
+public class AddWineActivity extends Activity implements SeekBar.OnSeekBarChangeListener, FlavorChanging<WineFlavors> {
 
     private ViewFlipper flipper;
+    private WineFlavorWheel flavorWheel;
     private Button nextButton;
     private Button backButton;
 
     private SeekBar colorSlider;
+    private SeekBar flavorSlider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.add_wine_activity);
-        getColorSlider().setOnSeekBarChangeListener( this );
+        getColorSlider().setOnSeekBarChangeListener(this);
+        getFlavorSlider().setOnSeekBarChangeListener(this);
+        getFlavorWheel().setCallback( this );
     }
 
     public void flipNext(View v){
@@ -50,6 +57,16 @@ public class AddWineActivity extends Activity implements SeekBar.OnSeekBarChange
     public void done(View v){
 
     }
+
+
+    public void nextFlavor(View v ){
+        getFlavorWheel().rotateRight();
+    }
+
+    public void previousFlavor(View v){
+        getFlavorWheel().rotateLeft();
+    }
+
 
     private void setButtons(){
         if ( getFlipper().getCurrentView().equals( (View)this.findViewById(R.id.view_metadata) ) ){
@@ -97,19 +114,43 @@ public class AddWineActivity extends Activity implements SeekBar.OnSeekBarChange
         return colorSlider;
     }
 
+    private SeekBar getFlavorSlider(){
+
+        if ( flavorSlider == null ){
+            flavorSlider = (SeekBar)this.findViewById(R.id.sld_flavor);
+        }
+        return flavorSlider;
+    }
+
+    private WineFlavorWheel getFlavorWheel(){
+        if ( flavorWheel == null ){
+            flavorWheel = (WineFlavorWheel)this.findViewById(R.id.flavor_wheel);
+        }
+        return flavorWheel;
+    }
+
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-        float percentage = (float)progress / 100.0f;
+        if ( seekBar == getColorSlider() ) {
+                float percentage = (float) progress / 100.0f;
 
-        float h = (float)(57.0f + ((345.0f-57.0f) * percentage));
-        float s = ((25.0f + ((100.0f-25.0f) * percentage)))/100.0f;
-        float v = ((100.0f - ((100.0f-45.0f) * percentage)))/100.0f;
+                float r = ((255.0f - ((255.0f - 115.0f) * percentage)));
+                float g = ((252.0f - ((252.0f - 0.0f) * percentage)));
+                float b = ((191.0f - ((191.0f - 29.0f) * percentage)));
 
-        float[] hsv = new float[]{h,s,v};
-        int newColor = Color.HSVToColor(hsv);
+                int red = Math.round( r );
+                int green = Math.round( g );
+                int blue = Math.round( b );
 
-        ((TextView) this.findViewById(R.id.txt_color)).setBackgroundColor(newColor);
+                int newColor = Color.rgb( red, green, blue );
+
+                ((TextView) this.findViewById(R.id.txt_color)).setBackgroundColor(newColor);
+        }
+        else if ( seekBar == getFlavorSlider() ){
+
+            getFlavorWheel().setTasteValue( getFlavorWheel().getSelectedItem(), progress );
+        }
     }
 
     @Override
@@ -120,5 +161,21 @@ public class AddWineActivity extends Activity implements SeekBar.OnSeekBarChange
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
 
+    }
+
+    @Override
+    public void flavorChanging(){
+        getBackButton().setEnabled( false );
+        getNextButton().setEnabled( false );
+        getFlavorSlider().setEnabled( false );
+    }
+
+    @Override
+    public void flavorSet( WineFlavors flavor, Integer value ){
+        getBackButton().setEnabled( true );
+        getNextButton().setEnabled( true );
+        getFlavorSlider().setEnabled( true );
+        getFlavorSlider().setProgress(value);
+        ((TextView)this.findViewById(R.id.txt_active)).setText( flavor.getNiceName() );
     }
 }
