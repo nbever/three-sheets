@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView"
+        android:layout_gravity="center_horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <ViewFlipper
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/viewFlipper"
+                >
+
+                <!-- meta data page -->
+                <LinearLayout
+                    android:id="@+id/view_metadata"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                        android:text="Winery"
+                        android:id="@+id/lbl_winery"
+                        android:paddingTop="15dp" />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:ems="10"
+                        android:id="@+id/txt_winery"
+                        android:text="Name" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="Title"
+                        android:id="@+id/lbl_name"
+                        android:paddingTop="15dp" />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:text="Title"
+                        android:ems="10"
+                        android:id="@+id/txt_name" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="Rating"
+                        android:id="@+id/lbl_rating"
+                        android:paddingTop="15dp" />
+
+                    <RatingBar
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/ratingBar"
+                        android:numStars="5"
+                        android:stepSize="0.25" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="Varietals"
+                        android:id="@+id/lbl_varietal"
+                        android:paddingTop="15dp" />
+
+                    <nate.threesheets.views.selection_addrs.VarietalSelector
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/varietal_adder">
+
+                    </nate.threesheets.views.selection_addrs.VarietalSelector>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="Price"
+                        android:id="@+id/lbl_price"
+                        android:paddingTop="15dp" />
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:text="$"
+                            android:id="@+id/lbl_dollar" />
+
+                        <EditText
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:ems="10"
+                            android:id="@+id/txt_price"
+                            android:layout_weight="1" />
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- flavor page -->
+                <LinearLayout
+                    android:id="@+id/view_flavors"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Flavor Description"
+                        android:ems="10"/>
+
+                    <Space
+                        android:layout_width="match_parent"
+                        android:layout_height="15dp" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageButton
+                            android:src="@mipmap/ic_rotate_left"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left"
+                            android:id="@+id/btn_rotate_left"
+                            android:layout_alignParentLeft="true"
+                            android:onClick="previousFlavor"/>
+
+                        <ImageButton
+                            android:src="@mipmap/ic_rotate_right"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/btn_rotate_right"
+                            android:onClick="nextFlavor"
+                            android:layout_alignParentRight="true" />
+
+                    </RelativeLayout>
+
+                    <nate.threesheets.views.flavor_wheel.WineFlavorWheel
+                        android:layout_width="300dp"
+                        android:layout_height="340dp"
+                        android:layout_gravity="center"
+                        android:id="@+id/flavor_wheel">
+
+                    </nate.threesheets.views.flavor_wheel.WineFlavorWheel>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txt_active"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                        android:paddingTop="15dp"
+                        android:paddingLeft="15dp"/>
+
+                    <SeekBar
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/sld_flavor"
+                        android:max="10"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:text="Color"
+                        android:id="@+id/lbl_color"
+                        android:paddingTop="15dp" />
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txt_color"
+                        android:height="30dp"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:background="#fffffcbd" />
+
+                    <SeekBar
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/sld_color"
+                        android:splitTrack="false" />
+
+                </LinearLayout>
+
+            </ViewFlipper>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_previous"
+                    android:enabled="false"
+                    android:text="Back"
+                    android:onClick="flipBack"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_next"
+                    android:enabled="true"
+                    android:text="Next"
+                    android:onClick="flipNext"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btn_save"
+                    android:paddingLeft="15dp"
+                    android:text="Save"
+                    android:onClick="done"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
