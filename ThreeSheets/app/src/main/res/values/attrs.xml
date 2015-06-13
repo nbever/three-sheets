@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <declare-styleable name="DrinkButton">
-        <attr name="backgroundOn" format="integer"></attr>
-        <attr name="backgroundOff" format="integer"></attr>
-        <attr name="drinkType" format="enum"></attr>
-    </declare-styleable>
-</resources>
