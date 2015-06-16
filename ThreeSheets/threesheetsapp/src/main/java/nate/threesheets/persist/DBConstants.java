@@ -20,4 +20,6 @@ public class DBConstants {
     public static final String RATING = "rating";
     public static final String LOCATION = "location";
     public static final String DATE = "date";
+    public static final String YEAR = "year";
+    public static final String NOTES = "notes";
 }

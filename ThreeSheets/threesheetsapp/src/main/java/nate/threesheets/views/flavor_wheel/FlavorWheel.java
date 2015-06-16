@@ -29,10 +29,12 @@ public class FlavorWheel<E> extends View {
 
     float rotation = 0.0f;
     float degreesPer = 0.0f;
+    float scale = 1.0f;
 
     private Handler animationHandler;
     private float targetRotation;
     private boolean goRight = false;
+    private boolean miniMode = false;
     private int selectedIndex = 0;
 
     private Map<E, Integer> tasteMap;
@@ -56,6 +58,8 @@ public class FlavorWheel<E> extends View {
         float cy = (float) (canvas.getHeight() / 2.0);
 
         canvas.translate(cx, cy);
+
+        canvas.scale( getScale(), getScale() );
 
         float rotationQoutient = (getWheelRotation() - 90.0f) % 360.0f;
 
@@ -83,44 +87,47 @@ public class FlavorWheel<E> extends View {
 
         float radius = 400;
 
-        canvas.save();
-
-        canvas.drawCircle(0, 0, radius, paint);
-        canvas.drawCircle(0, 0, (float) (radius * 4.0 / 5.0), paint);
-        canvas.drawCircle(0, 0, (float) (radius * 3.0 / 5.0), paint);
-        canvas.drawCircle(0, 0, (float) (radius * 2.0 / 5.0), paint);
-        canvas.drawCircle(0, 0, (float) (radius * 1.0 / 5.0), paint);
-
-        for (int i = 0; i < getFlavors().size(); i++) {
-            canvas.drawLine(0, 0, radius, 0, paint);
-
-            // text stuff
+        if ( !isMiniMode() ) {
             canvas.save();
 
-            canvas.translate(radius + 10, 0);
-            canvas.rotate(90.0f);
-            String txt = getFlavors().get(i).toString();
-            float tWidth = textPaint.measureText(txt);
+            canvas.drawCircle(0, 0, radius, paint);
+            canvas.drawCircle(0, 0, (float) (radius * 4.0 / 5.0), paint);
+            canvas.drawCircle(0, 0, (float) (radius * 3.0 / 5.0), paint);
+            canvas.drawCircle(0, 0, (float) (radius * 2.0 / 5.0), paint);
+            canvas.drawCircle(0, 0, (float) (radius * 1.0 / 5.0), paint);
 
-            canvas.drawText(txt, 0 - (tWidth / 2.0f), 0, textPaint);
+            for (int i = 0; i < getFlavors().size(); i++) {
+                canvas.drawLine(0, 0, radius, 0, paint);
 
-            canvas.translate(0, -50);
+                // text stuff
+                canvas.save();
 
-            Paint squarePaint = new Paint();
-            squarePaint.setColor( ((HasColor)getFlavors().get(i)).getColor() );
-            squarePaint.setStyle(Paint.Style.FILL);
+                canvas.translate(radius + 10, 0);
+                canvas.rotate(90.0f);
+                String txt = getFlavors().get(i).toString();
+                float tWidth = textPaint.measureText(txt);
 
-            canvas.drawCircle(0,0,10,squarePaint);
+                canvas.drawText(txt, 0 - (tWidth / 2.0f), 0, textPaint);
+
+                canvas.translate(0, -50);
+
+                Paint squarePaint = new Paint();
+                squarePaint.setColor(((HasColor) getFlavors().get(i)).getColor());
+                squarePaint.setStyle(Paint.Style.FILL);
+
+                canvas.drawCircle(0, 0, 10, squarePaint);
+
+                canvas.restore();
+
+                // next
+                canvas.rotate(getDegreesPer());
+
+            }
 
             canvas.restore();
-
-            // next
-            canvas.rotate(getDegreesPer());
-
-//            canvas.restore();
         }
 
-        canvas.restore();
+
 
         // have to do the flavor path stuff first because it can't use rotate
         Path flavorPath = new Path();
@@ -261,6 +268,20 @@ public class FlavorWheel<E> extends View {
         return stop;
     }
 
+    public void setScale( float aScale ){
+        this.scale = aScale;
+    }
+
+    private float getScale(){
+        return this.scale;
+    }
+
+    public void setMiniMode( Boolean isMode ){
+        this.miniMode = isMode;
+    }
+
+    private boolean isMiniMode(){ return miniMode; }
+
     private float getWheelRotation(){
         return rotation;
     }
@@ -286,6 +307,10 @@ public class FlavorWheel<E> extends View {
         }
 
         return tasteMap;
+    }
+
+    public void setTasteMap( Map<E, Integer> tasteMap ){
+        this.tasteMap = tasteMap;
     }
 
     public void setTasteValue( E flavor, Integer value ){

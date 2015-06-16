@@ -1,4 +1,4 @@
-package nate.threesheets.widgets;
+package nate.threesheets.views.selection_addrs;
 
 import android.content.Context;
 import android.database.DataSetObserver;
@@ -44,6 +44,16 @@ public class SelectionAdderItem<E> extends LinearLayout {
         return (E)getTypeSpinner().getSelectedItem();
     }
 
+    public void setSelectedItem( E item ){
+
+        for ( int i = 0; i < getTypeSpinner().getCount(); i++ ){
+            if ( getTypeSpinner().getItemAtPosition(i).equals( item ) ){
+                getTypeSpinner().setSelection(i);
+                return;
+            }
+        }
+    }
+
     private List<E> getOptions(){
 
         if ( options == null ){
@@ -72,8 +82,9 @@ public class SelectionAdderItem<E> extends LinearLayout {
 
     private Button getRemoveButton(){
         if ( removeButton == null ){
-            removeButton = new Button(this.getContext());
-            removeButton.setText("-");
+            removeButton = new Button(this.getContext(), null, android.R.attr.buttonStyleSmall);
+            removeButton.setText("");
+            removeButton.setBackgroundResource(R.mipmap.ic_remove);
             removeButton.setOnClickListener(getClickListener());
         }
 

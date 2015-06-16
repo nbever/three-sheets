@@ -3,6 +3,7 @@ package nate.threesheets.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.provider.ContactsContract;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -37,6 +38,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        DatabaseManager.getInstance().close();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -60,23 +68,23 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     public void toggleClicked( View view ){
 
-//        DrinkButton button = (DrinkButton)view;
-//        View mainView = this.findViewById(R.id.view_main);
-//
-//        switch( button.getDrinkType() ){
-//            case BEER:
-//                mainView.setBackgroundResource(R.drawable.pubslice);
-//                break;
-//            case SAKE:
-//                mainView.setBackgroundResource(R.drawable.sake);
-//                break;
-//            case WINE:
-//                mainView.setBackgroundResource(R.drawable.vineyardslice);
-//                break;
-//            case WHISKEY:
-//                mainView.setBackgroundResource(R.drawable.studyslice);
-//                break;
-//        }
+        DrinkButton button = (DrinkButton)view;
+        View mainView = this.findViewById(R.id.view_main);
+
+        switch( button.getDrinkType() ){
+            case BEER:
+                mainView.setBackgroundResource(R.drawable.pubslice_sm);
+                break;
+            case SAKE:
+                mainView.setBackgroundResource(R.drawable.sake_sm);
+                break;
+            case WINE:
+                mainView.setBackgroundResource(R.drawable.vineyardslice_sm);
+                break;
+            case WHISKEY:
+                mainView.setBackgroundResource(R.drawable.studyslice_sm);
+                break;
+        }
     }
 
     public void addDrinkClicked( View view ){
@@ -102,7 +110,24 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     public void browseClicked( View v ){
+        DrinkTypeBar drinkBar = (DrinkTypeBar) this.findViewById(R.id.drink_bar);
 
+        Intent browseActivity = null;
+
+        switch( drinkBar.getSelectedType() ){
+            case BEER:
+                break;
+            case WHISKEY:
+                break;
+            case WINE:
+                browseActivity = new Intent( this, BrowseActivity.class);
+                break;
+            case SAKE:
+                break;
+        }
+
+        browseActivity.putExtra(DrinkType.DRINK_TYPE, drinkBar.getSelectedType());
+        startActivity(browseActivity);
     }
 
     private DrinkTypeBar getDrinkBar(){

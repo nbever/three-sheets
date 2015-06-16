@@ -1,14 +1,19 @@
 package nate.threesheets.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import java.util.ArrayList;
@@ -17,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import nate.threesheets.R;
+import nate.threesheets.model.Drink;
 import nate.threesheets.model.Varietal;
 import nate.threesheets.model.Wine;
 import nate.threesheets.model.WineFlavors;
@@ -25,7 +31,7 @@ import nate.threesheets.views.flavor_wheel.FlavorChanging;
 import nate.threesheets.views.flavor_wheel.WineFlavorWheel;
 import nate.threesheets.views.selection_addrs.SelectionAdder;
 import nate.threesheets.views.selection_addrs.VarietalSelector;
-import nate.threesheets.widgets.SelectionAdderItem;
+import nate.threesheets.views.selection_addrs.SelectionAdderItem;
 
 /**
  * Created by nate on 6/10/15.
@@ -43,6 +49,8 @@ public class AddWineActivity extends Activity implements SeekBar.OnSeekBarChange
 
     private int color;
 
+    private Wine wine;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +59,21 @@ public class AddWineActivity extends Activity implements SeekBar.OnSeekBarChange
         getColorSlider().setOnSeekBarChangeListener(this);
         getFlavorSlider().setOnSeekBarChangeListener(this);
         getFlavorWheel().setCallback( this );
+
+        Intent intent = this.getIntent();
+        wine = (Wine)intent.getExtras().get(Drink.DRINK);
+
+        if ( getWine() != null ){
+            getFlavorWheel().setTasteMap( (Map<WineFlavors, Integer>)wine.getFlavorMap() );
+            ((EditText)findViewById(R.id.txt_winery)).setText(wine.getFacility());
+            ((EditText)findViewById(R.id.txt_name)).setText(wine.getName());
+            ((EditText)findViewById(R.id.txt_price)).setText(wine.getPrice() + "");
+            ((EditText)findViewById(R.id.txt_wine_year)).setText(String.valueOf(wine.getYear()));
+            ((SelectionAdder)findViewById(R.id.varietal_adder)).setItems(wine.getVarietals());
+            ((EditText)findViewById(R.id.txt_notes)).setText(wine.getNotes());
+            ((EditText)findViewById(R.id.txt_location)).setText(wine.getLocation());
+        }
+
     }
 
     public void flipNext(View v){
@@ -71,14 +94,19 @@ public class AddWineActivity extends Activity implements SeekBar.OnSeekBarChange
 
     public void done(View v){
 
-        Wine wine = new Wine();
-        wine.setVineyard(((TextView) findViewById(R.id.txt_winery)).getText().toString());
-        wine.setName(((TextView) findViewById(R.id.txt_name)).getText().toString());
+        if ( getWine() == null ) {
+            wine = new Wine();
+        }
+
+        wine.setFacility(((EditText) findViewById(R.id.txt_winery)).getText().toString());
+        wine.setName(((EditText) findViewById(R.id.txt_name)).getText().toString());
         wine.setRed(Color.red(color));
         wine.setGreen(Color.green(color));
         wine.setBlue(Color.blue(color));
+        wine.setNotes(((EditText) this.findViewById(R.id.txt_notes)).getText().toString());
+        wine.setLocation(((EditText) findViewById(R.id.txt_location)).getText().toString());
 
-        String price = ((TextView)findViewById(R.id.txt_price)).getText().toString();
+        String price = ((EditText)findViewById(R.id.txt_price)).getText().toString();
         float number = 0.0f;
 
         try {
@@ -88,13 +116,23 @@ public class AddWineActivity extends Activity implements SeekBar.OnSeekBarChange
 
         }
 
+        int year = 2015;
+
+        try {
+            year = Integer.parseInt(((EditText) findViewById(R.id.txt_wine_year)).getText().toString());
+        }
+        catch( NumberFormatException e ){
+
+        }
+
+        wine.setYear( year );
         wine.setPrice(number);
 
         int rating = (int)(((RatingBar)findViewById(R.id.ratingBar)).getRating() * 2.0f);
         wine.setRating(rating);
 
         Map<WineFlavors, Integer> tasteMap = ((WineFlavorWheel)findViewById(R.id.flavor_wheel)).getTasteMap();
-        wine.setFlavors(tasteMap);
+        wine.setFlavorMap(tasteMap);
 
         VarietalSelector sel = getVarietalSelector();
         Iterator<SelectionAdderItem> itemIt = sel.getItemList().iterator();
@@ -106,9 +144,14 @@ public class AddWineActivity extends Activity implements SeekBar.OnSeekBarChange
             vList.add( (Varietal)item.getSelectedItem() );
         }
 
-        wine.setVarietals( vList );
+        wine.setVarietals(vList);
 
-        DatabaseManager.getInstance().save( wine );
+        DatabaseManager.getInstance().save(wine);
+
+        Toast msg = Toast.makeText(this, "Wine was saved.", Toast.LENGTH_SHORT);
+        msg.show();
+
+        finish();
     }
 
 
@@ -122,12 +165,19 @@ public class AddWineActivity extends Activity implements SeekBar.OnSeekBarChange
 
 
     private void setButtons(){
-        if ( getFlipper().getCurrentView().equals( (View)this.findViewById(R.id.view_metadata) ) ){
+
+        View currentView = getFlipper().getCurrentView();
+
+        if ( currentView.equals( (View)this.findViewById(R.id.view_metadata) ) ){
             getNextButton().setEnabled(true);
             getBackButton().setEnabled(false);
         }
-        else {
+        else if ( currentView.equals((View)this.findViewById(R.id.view_notes))){
             getNextButton().setEnabled(false);
+            getBackButton().setEnabled(true);
+        }
+        else {
+            getNextButton().setEnabled(true);
             getBackButton().setEnabled(true);
         }
 
@@ -188,6 +238,10 @@ public class AddWineActivity extends Activity implements SeekBar.OnSeekBarChange
         }
 
         return varietalSelector;
+    }
+
+    private Wine getWine(){
+        return wine;
     }
 
     @Override

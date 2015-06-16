@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:threesheetsapp="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="nate.threesheets.activities.AddWineActivity">
+
+    <item
+        android:id="@+id/menu_back"
+        android:icon="@mipmap/ic_back"
+        android:title="Back"
+        threesheetsapp:showAsAction="always"
+        android:onClick="flipBack">
+    </item>
+    <item
+        android:id="@+id/menu_next"
+        android:icon="@mipmap/ic_next"
+        android:title="Next"
+        threesheetsapp:showAsAction="always"
+        android:onClick="flipNext">
+    </item>
+
+</menu>
